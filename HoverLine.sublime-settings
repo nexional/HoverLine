@@ -1,0 +1,7 @@
+{
+    // Enable/disable the package
+    "enable": true,
+
+    // Tooltip timeout in seconds
+    "tooltip_timeout": 3
+}

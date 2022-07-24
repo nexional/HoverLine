@@ -1,0 +1,16 @@
+  __   __ _______ __   __ _______ ______   ___     ___ __    _ _______
+ |  | |  |       |  | |  |       |    _ | |   |   |   |  |  | |       |
+ |  |_|  |   _   |  |_|  |    ___|   | || |   |   |   |   |_| |    ___|
+ |       |  | |  |       |   |___|   |_||_|   |   |   |       |   |___
+ |       |  |_|  |       |    ___|    __  |   |___|   |  _    |    ___|
+ |   _   |       ||     ||   |___|   |  | |       |   | | |   |   |___
+ |__| |__|_______| |___| |_______|___|  |_|_______|___|_|  |__|_______|
+
+
+Thanks for installing this package. I hope it increases your productivity.
+
+Documentation to help you get started:
+
+- Navigate to: Preferences > Package Settings > HoverLine > README
+OR
+- visit github: https://github.com/nexional/HoverLine/blob/main/README.md

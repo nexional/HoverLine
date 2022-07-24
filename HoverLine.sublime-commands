@@ -1,0 +1,10 @@
+[
+    {
+        "caption": "HoverLine: toggle tooltip",
+        "command": "hover_line", "args": { "toggle_package": true }
+    },
+    {
+        "caption": "HoverLine: set tooltip timeout",
+        "command": "hover_line", "args": { "set_tooltip_timeout": true }
+    }
+]
