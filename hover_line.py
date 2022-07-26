@@ -48,7 +48,7 @@ class HoverLineToolTipCommand(sublime_plugin.ViewEventListener):
         content = view.substr(view.line(view.text_point(row, 0)))
         first_visible_col = math.floor(view.viewport_position()[0] / view.em_width())
         if wrap_len >= len(content) and first_visible_col == 0: return
-        clist = wrap(text=content, width=wrap_len-2, replace_whitespace=False, drop_whitespace=False, break_long_words=True, tabsize=view.settings().get('tab_size'))
+        clist = wrap(text=content, width=wrap_len-4, replace_whitespace=False, drop_whitespace=False, break_long_words=True, tabsize=view.settings().get('tab_size'))
         content = '<div>' + '<br>'.join(re.sub(r'\s', '&nbsp;', html.escape(x)) for x in clist) + '</div>'
         view.show_popup(content=content, location=view.text_point(row, first_visible_col + 1), max_width=max_width, max_height=len(content))
         sublime.set_timeout_async(lambda: view.hide_popup(), settings.get('tooltip_timeout') * 1000)
