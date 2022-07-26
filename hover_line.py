@@ -24,17 +24,17 @@ class HoverLineCommand(sublime_plugin.WindowCommand):
             sublime.save_settings('HoverLine.sublime-settings')
             sublime.message_dialog(this_package + 'package now ' + ('enabled' if settings.get('enable') else 'disabled'))
         elif locals()['set_tooltip_timeout']:
-            tooltip_timeout = str(settings.get('tooltip_timeout'))
-            if not tooltip_timeout: tooltip_timeout = '3'
+            tooltip_timeout = settings.get('tooltip_timeout')
+            if not tooltip_timeout or int(tooltip_timeout) < 0: tooltip_timeout = 3
             def on_done(num):
-                if num and num.isdigit() and int(num) > 0:
+                if num and num.isdigit() and int(num) >= 0:
                     settings.set('tooltip_timeout', int(num))
                     sublime.save_settings('HoverLine.sublime-settings')
                     sublime.message_dialog(this_package + 'tooltip_timeout updated to ' + str(num))
                 else:
                     sublime.error_message(this_package + 'please provide a valid whole number')
-                    w.show_input_panel('tooltip_timeout:', num, on_done, None, None)
-            w.show_input_panel('tooltip_timeout:', tooltip_timeout, on_done, None, None)
+                    w.show_input_panel('tooltip_timeout:', str(num), on_done, None, None)
+            w.show_input_panel('tooltip_timeout:', str(tooltip_timeout), on_done, None, None)
         return True
 
 class HoverLineToolTipCommand(sublime_plugin.ViewEventListener):
@@ -48,10 +48,15 @@ class HoverLineToolTipCommand(sublime_plugin.ViewEventListener):
         content = view.substr(view.line(view.text_point(row, 0)))
         first_visible_col = math.floor(view.viewport_position()[0] / view.em_width())
         if wrap_len >= len(content) and first_visible_col == 0: return
-        clist = wrap(text=content, width=wrap_len-4, replace_whitespace=False, drop_whitespace=False, break_long_words=True, tabsize=view.settings().get('tab_size'))
+
+        clist = wrap(text=content, width=wrap_len-2, replace_whitespace=False, drop_whitespace=False, break_long_words=True, tabsize=view.settings().get('tab_size'))
+        if len(clist) > 10: clist = wrap(text=content, width=wrap_len-4, replace_whitespace=False, drop_whitespace=False, break_long_words=True, tabsize=view.settings().get('tab_size'))
+
         content = '<div>' + '<br>'.join(re.sub(r'\s', '&nbsp;', html.escape(x)) for x in clist) + '</div>'
-        view.show_popup(content=content, location=view.text_point(row, first_visible_col + 1), max_width=max_width, max_height=len(content))
-        sublime.set_timeout_async(lambda: view.hide_popup(), settings.get('tooltip_timeout') * 1000)
+        max_height = int(min(len(clist), 10) * view.line_height()) + 30
+        view.show_popup(content=content, location=view.text_point(row, first_visible_col+1), max_width=max_width, max_height=max_height)
+        tooltip_timeout = int(settings.get('tooltip_timeout'))
+        if tooltip_timeout > 0: sublime.set_timeout_async(lambda: view.hide_popup(), tooltip_timeout * 1000)
 
     def is_enabled(self=None):
         global settings

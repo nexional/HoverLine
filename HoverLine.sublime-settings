@@ -2,6 +2,6 @@
     // Enable/disable the package
     "enable": true,
 
-    // Tooltip timeout in seconds
-    "tooltip_timeout": 3
+    // Tooltip timeout in seconds, 0 to disable timeout
+    "tooltip_timeout": 5
 }
