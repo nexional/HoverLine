@@ -10,7 +10,7 @@
 ```
 # HoverLine
 
-Ever wondered if there was a way to see the a line in its entirety without scrolling to right or turning word-wrap on & off again. Specially when the file has long lines and you prefer
+Ever wondered if there was a way to see a line in its entirety without scrolling to right or turning word-wrap on & off again. Specially when the file has long lines and you prefer
 word-wrap off for better readability, say for log files.
 
 **HoverLine** can help you there. This package shows the hovered-over line in its entirety as a tooltip, given:
