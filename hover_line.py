@@ -13,9 +13,9 @@ def plugin_loaded():
     settings.add_on_change('enable', HoverLineToolTipCommand.is_enabled())
 
 class HoverLineCommand(sublime_plugin.WindowCommand):
-    def run(self, toggle_package=False, set_tooltip_timeout=False):
+    def run(self, toggle_package=False, set_tooltip_timeout=False, toggle_syntax_highlight=False):
         global settings
-        w = self.window
+        win = self.window
         if True not in locals().values(): return
         if locals()['toggle_package']:
             settings.clear_on_change('enable')
@@ -24,8 +24,8 @@ class HoverLineCommand(sublime_plugin.WindowCommand):
             sublime.save_settings('HoverLine.sublime-settings')
             sublime.message_dialog(this_package + 'package now ' + ('enabled' if settings.get('enable') else 'disabled'))
         elif locals()['set_tooltip_timeout']:
-            tooltip_timeout = settings.get('tooltip_timeout')
-            if not tooltip_timeout or int(tooltip_timeout) < 0: tooltip_timeout = 3
+            num = settings.get('tooltip_timeout')
+            if num is None or not str(num).isdigit() or int(num) < 0: num = 3
             def on_done(num):
                 if num and num.isdigit() and int(num) >= 0:
                     settings.set('tooltip_timeout', int(num))
@@ -33,8 +33,17 @@ class HoverLineCommand(sublime_plugin.WindowCommand):
                     sublime.message_dialog(this_package + 'tooltip_timeout updated to ' + str(num))
                 else:
                     sublime.error_message(this_package + 'please provide a valid whole number')
-                    w.show_input_panel('tooltip_timeout:', str(num), on_done, None, None)
-            w.show_input_panel('tooltip_timeout:', str(tooltip_timeout), on_done, None, None)
+                    win.show_input_panel('tooltip_timeout:', num, on_done, None, None)
+            win.show_input_panel('tooltip_timeout:', num, on_done, None, None)
+        elif locals()['toggle_syntax_highlight']:
+            syntax_highlight = settings.get('syntax_highlight')
+            if syntax_highlight is None or syntax_highlight not in [True, False]: syntax_highlight = False
+            syntax_supported = int(sublime.version()) >= 4092
+            if not syntax_supported:
+                sublime.message_dialog(this_package + 'syntax_highlight is supported for Sublime Text build 4092 and later only. Your version/build: ' + sublime.version())
+            settings.set('syntax_highlight', not syntax_highlight and syntax_supported)
+            sublime.save_settings('HoverLine.sublime-settings')
+            sublime.message_dialog(this_package + 'syntax_highlight now ' + ('enabled' if settings.get('syntax_highlight') else 'disabled'))
         return True
 
 class HoverLineToolTipCommand(sublime_plugin.ViewEventListener):

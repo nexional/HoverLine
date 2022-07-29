@@ -6,5 +6,9 @@
     {
         "caption": "HoverLine: set tooltip timeout",
         "command": "hover_line", "args": { "set_tooltip_timeout": true }
+    },
+    {
+        "caption": "HoverLine: toggle syntax_highlight",
+        "command": "hover_line", "args": { "toggle_syntax_highlight": true }
     }
 ]

@@ -3,5 +3,8 @@
     "enable": true,
 
     // Tooltip timeout in seconds, 0 to disable timeout
-    "tooltip_timeout": 5
+    "tooltip_timeout": 5,
+
+    // Show syntax highlighting (Sublime Text build 4092 and later only)
+    "syntax_highlight": false
 }
