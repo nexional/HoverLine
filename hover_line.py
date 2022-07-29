@@ -15,7 +15,7 @@ def plugin_loaded():
 class HoverLineCommand(sublime_plugin.WindowCommand):
     def run(self, toggle_package=False, set_tooltip_timeout=False):
         global settings
-        w = self.window
+        win = self.window
         if True not in locals().values(): return
         if locals()['toggle_package']:
             settings.clear_on_change('enable')
@@ -24,17 +24,17 @@ class HoverLineCommand(sublime_plugin.WindowCommand):
             sublime.save_settings('HoverLine.sublime-settings')
             sublime.message_dialog(this_package + 'package now ' + ('enabled' if settings.get('enable') else 'disabled'))
         elif locals()['set_tooltip_timeout']:
-            tooltip_timeout = settings.get('tooltip_timeout')
-            if not tooltip_timeout or int(tooltip_timeout) < 0: tooltip_timeout = 3
+            num = settings.get('tooltip_timeout')
+            if num is None or not str(num).isdigit() or int(num) < 0: num = 3
             def on_done(num):
-                if num and num.isdigit() and int(num) >= 0:
+                if num and str(num).isdigit() and int(num) >= 0:
                     settings.set('tooltip_timeout', int(num))
                     sublime.save_settings('HoverLine.sublime-settings')
                     sublime.message_dialog(this_package + 'tooltip_timeout updated to ' + str(num))
                 else:
                     sublime.error_message(this_package + 'please provide a valid whole number')
-                    w.show_input_panel('tooltip_timeout:', str(num), on_done, None, None)
-            w.show_input_panel('tooltip_timeout:', str(tooltip_timeout), on_done, None, None)
+                    win.show_input_panel('tooltip_timeout:', str(num), on_done, None, None)
+            win.show_input_panel('tooltip_timeout:', str(num), on_done, None, None)
         return True
 
 class HoverLineToolTipCommand(sublime_plugin.ViewEventListener):
